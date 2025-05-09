@@ -16,3 +16,4 @@ The following packages are required to run this software:
 - **matplotlib**: 3.10.0  
 - **scipy**: 1.15.1  
 - **tqdm**: 4.67.1  
+![image](https://github.com/user-attachments/assets/a1088068-b8c2-4ca0-a56e-c55a85f8c5f4)
