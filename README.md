@@ -375,8 +375,8 @@ Built with [OpenCV](https://opencv.org/), [NumPy](https://numpy.org/), [SciPy](h
 
 <div align="center">
 
-**If you find this project helpful, please consider giving it a ⭐️**
 
-Made with ❤️ by Harmeet Dhillon
+
+
 
 </div>
