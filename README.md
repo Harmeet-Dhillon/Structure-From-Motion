@@ -11,7 +11,7 @@
 
 *Recovering camera motion and 3D scene geometry from multiple uncalibrated images*
 
-[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Technical Details](#technical-details) • [Results](#results)
+[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Pipeline](#pipeline-architecture) • [Contact](#contact)
 
 ![Structure-From-Motion Demo](https://github.com/user-attachments/assets/a1088068-b8c2-4ca0-a56e-c55a85f8c5f4)
 
@@ -19,32 +19,15 @@
 
 ---
 
-## 📋 Table of Contents
+## 👋 About This Project
 
-- [Overview](#overview)
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Project Structure](#project-structure)
-- [Usage](#usage)
-- [Pipeline Architecture](#pipeline-architecture)
-- [Technical Details](#technical-details)
-- [Results](#results)
-- [Dependencies](#dependencies)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
+I'm **Harmeet Dhillon**, a robotics engineer specializing in computer vision and autonomous systems. This project represents my deep dive into 3D reconstruction techniques, implementing a complete Structure-from-Motion pipeline from scratch. Through this work, I'm exploring the mathematical foundations of multi-view geometry and building the core algorithms that enable robots to understand and navigate 3D environments. This implementation covers everything from feature matching and camera pose estimation to bundle adjustment and 3D point cloud generation—essential skills for my research in SLAM, autonomous navigation, and robotic perception.
 
 ---
 
-## 🎯 Overview
+## Overview
 
-This project implements a complete **Structure-from-Motion (SfM)** pipeline that reconstructs 3D scene geometry and camera poses from a collection of 2D images. SfM is a fundamental technique in computer vision that powers applications like 3D scanning, autonomous navigation, augmented reality, and photogrammetry.
-
-### What is Structure-from-Motion?
-
-Structure-from-Motion is the process of estimating the 3D structure of a scene and the motion of the camera from a sequence of 2D images. Unlike traditional 3D reconstruction methods that require calibrated cameras or structured lighting, SfM works with regular photographs taken from different viewpoints.
+**Structure-from-Motion (SfM)** reconstructs 3D scene geometry and camera poses from regular 2D photographs. Unlike traditional methods requiring calibrated cameras or structured lighting, SfM works with ordinary images taken from different viewpoints—the same technique used in 3D scanning, autonomous vehicles, and augmented reality applications.
 
 ### Key Capabilities
 
@@ -58,38 +41,21 @@ Structure-from-Motion is the process of estimating the 3D structure of a scene a
 
 ## ✨ Features
 
-### Core Functionality
-
-- 🎥 **Multi-View Reconstruction**: Process multiple images to build comprehensive 3D models
-- 📐 **Epipolar Geometry**: Essential and Fundamental matrix estimation
-- 🎯 **Feature Detection & Matching**: SIFT/SURF/ORB feature extraction with ratio test filtering
-- 🔺 **Triangulation**: Linear and non-linear methods for 3D point reconstruction
-- 📊 **Visualization**: Interactive 3D point cloud and camera pose visualization
-- ⚡ **Efficient Processing**: Optimized algorithms with progress tracking
-
-### Advanced Features
-
-- **Bundle Adjustment**: Non-linear optimization using Levenberg-Marquardt
-- **Reprojection Error Minimization**: Iterative refinement of camera and structure parameters
-- **Cheirality Check**: Ensures reconstructed points are in front of cameras
-- **Automatic Calibration**: Works with both calibrated and uncalibrated cameras
-- **Incremental Reconstruction**: Processes image sequences progressively
+- 🎥 **Multi-View Reconstruction** - Build comprehensive 3D models from multiple images
+- 📐 **Epipolar Geometry** - Essential and Fundamental matrix estimation with RANSAC
+- 🎯 **Feature Matching** - Robust SIFT/SURF feature detection with outlier filtering
+- 🔺 **Triangulation** - Linear and non-linear 3D point reconstruction
+- 🔧 **Bundle Adjustment** - Global optimization using Levenberg-Marquardt
+- 📊 **3D Visualization** - Interactive point cloud and camera trajectory plots
+- ⚡ **Incremental Reconstruction** - PnP-based sequential camera registration
 
 ---
 
 ## 🔧 Prerequisites
 
-Before you begin, ensure you have the following installed:
-
-- **Python**: Version 3.8 or higher
-- **pip**: Python package installer
-- **Git**: For cloning the repository
-
-### System Requirements
-
-- **OS**: Windows, macOS, or Linux
-- **RAM**: Minimum 4GB (8GB+ recommended for large datasets)
-- **Storage**: ~500MB for dependencies + your image dataset
+- **Python 3.8+**
+- **pip** (Python package installer)
+- **4GB+ RAM** (8GB recommended for large datasets)
 
 ---
 
@@ -235,155 +201,89 @@ IMAGE_INDICES = [1, 2, 3, 5, 7]  # Process only these images
 
 ## 🔬 Pipeline Architecture
 
-The SfM pipeline follows these sequential stages:
-
 ```
 Input Images
     ↓
-[1] Feature Detection & Matching
+Feature Detection & Matching
     ↓
-[2] Fundamental Matrix Estimation (RANSAC)
+Fundamental Matrix (RANSAC)
     ↓
-[3] Essential Matrix Computation
+Essential Matrix & Camera Pose
     ↓
-[4] Camera Pose Recovery
+Triangulation (Linear + Non-linear)
     ↓
-[5] Triangulation (Linear + Non-linear)
+Pose Disambiguation
     ↓
-[6] Pose Disambiguation (Cheirality)
+Incremental Reconstruction (PnP)
     ↓
-[7] Incremental Reconstruction (PnP RANSAC)
+Bundle Adjustment
     ↓
-[8] Bundle Adjustment (Global Optimization)
-    ↓
-3D Reconstruction Output
+3D Point Cloud Output
 ```
 
-### Stage Details
+### Key Algorithms
 
-#### 1. Feature Detection & Matching
-- Extracts distinctive keypoints from images
-- Computes feature descriptors (SIFT/SURF)
-- Matches features across image pairs using ratio test
-- Filters outliers based on geometric constraints
+**Fundamental Matrix**: 8-point algorithm with RANSAC for robust geometric estimation
 
-#### 2. Fundamental Matrix Estimation
-- Uses 8-point algorithm with RANSAC
-- Estimates geometric relationship between image pairs
-- Achieves robustness against outliers
-- Validates using epipolar constraint
+**Triangulation**: Direct Linear Transform (DLT) followed by non-linear refinement to minimize reprojection error
 
-#### 3. Essential Matrix & Camera Pose
-- Converts Fundamental matrix using camera calibration
-- Decomposes Essential matrix into 4 possible poses
-- Applies cheirality constraint to select correct pose
-- Ensures 3D points are in front of both cameras
+**PnP RANSAC**: Perspective-n-Point for registering new cameras to existing 3D structure
 
-#### 4. Triangulation
-- Linear triangulation using DLT (Direct Linear Transform)
-- Non-linear refinement minimizing reprojection error
-- Handles noise and numerical instabilities
-- Produces 3D point coordinates
-
-#### 5. Incremental Reconstruction
-- Registers new images using PnP (Perspective-n-Point)
-- RANSAC for robust camera pose estimation
-- Triangulates new 3D points visible in multiple views
-- Builds dense reconstruction incrementally
-
-#### 6. Bundle Adjustment
-- Jointly optimizes camera poses and 3D structure
-- Minimizes reprojection error across all views
-- Uses Levenberg-Marquardt algorithm
-- Handles large-scale optimization efficiently
+**Bundle Adjustment**: Joint optimization of all camera poses and 3D points using Levenberg-Marquardt
 
 ---
 
 ## 🔍 Technical Details
 
-### Algorithms Implemented
+### Core Mathematical Formulations
 
-#### Fundamental Matrix Estimation
+**Fundamental Matrix**: Encodes epipolar geometry between two views
 ```
-F = [f11 f12 f13]
-    [f21 f22 f23]
-    [f31 f32 f33]
-
-Constraint: x2^T F x1 = 0
+x2^T F x1 = 0
 ```
-- Normalized 8-point algorithm
-- RANSAC with adaptive threshold
-- Rank-2 constraint enforcement
 
-#### Essential Matrix Decomposition
+**Essential Matrix**: Relates to camera motion
 ```
 E = K2^T F K1
 E = [R|t]
 ```
-Four possible decompositions:
-- (R1, t), (R1, -t), (R2, t), (R2, -t)
 
-#### Triangulation Methods
-
-**Linear Triangulation (DLT)**:
-```
-A X = 0
-where X = [X, Y, Z, 1]^T
-```
-
-**Non-linear Optimization**:
+**Triangulation**: Reconstructs 3D points from 2D correspondences
 ```
 minimize Σ ||x_i - π(K[R|t]X)||^2
 ```
 
-#### Bundle Adjustment
+**Bundle Adjustment**: Global optimization
 ```
 minimize Σ_i Σ_j ||x_ij - π(K_i[R_i|t_i]X_j)||^2
 ```
-- Sparse Levenberg-Marquardt
-- Schur complement for efficiency
-- Robust cost functions (Huber)
 
-### Mathematical Foundations
-
-- **Epipolar Geometry**: Geometric relationship between two views
-- **Multi-View Geometry**: Extension to n cameras
-- **Projective Geometry**: Homogeneous coordinates and transformations
-- **Non-linear Optimization**: Gauss-Newton and Levenberg-Marquardt
-- **RANSAC**: Random Sample Consensus for outlier rejection
+### Implementation Highlights
+- Normalized 8-point algorithm with rank-2 constraint
+- RANSAC with adaptive thresholding for outlier rejection
+- Sparse Levenberg-Marquardt optimization
+- Cheirality checks to ensure valid reconstructions
 
 ---
 
 ## 📊 Results
 
-### Performance Metrics
-
-The quality of reconstruction is evaluated using:
-
+### Output Metrics
 - **Reprojection Error**: Mean pixel distance between observed and projected points
-- **3D Point Accuracy**: Comparison with ground truth (if available)
-- **Camera Pose Error**: Rotation and translation accuracy
-- **Reconstruction Completeness**: Percentage of scene reconstructed
+- **3D Point Count**: Number of successfully reconstructed points
+- **Camera Accuracy**: Rotation and translation error metrics
 
 ### Example Output
-
 ```
 === SfM Reconstruction Summary ===
 Images processed: 5
-3D points reconstructed: 1,247
+3D points: 1,247
 Mean reprojection error: 0.82 pixels
 Bundle adjustment iterations: 23
-Final cost: 0.0034
 Processing time: 12.4 seconds
 ```
 
-### Visualization
-
-The pipeline generates:
-- **3D Point Cloud**: Matplotlib 3D scatter plot with camera frustums
-- **Camera Trajectory**: Top-down view showing camera positions
-- **Reprojection Visualization**: Feature matches with epipolar lines
-- **Error Distribution**: Histogram of reprojection errors
+The pipeline generates 3D point cloud visualizations, camera trajectory plots, and reprojection error distributions.
 
 ---
 
@@ -414,47 +314,13 @@ pip install -r requirements.txt
 
 ## 🐛 Troubleshooting
 
-### Common Issues
-
-#### Issue: "Data folder not found"
-**Solution**: Ensure you're running `Wrapper.py` from the `Phase1` directory:
-```bash
-cd Phase1
-python Wrapper.py
-```
-
-#### Issue: "ModuleNotFoundError: No module named 'cv2'"
-**Solution**: Install OpenCV:
-```bash
-pip install opencv-python==4.10.0
-```
-
-#### Issue: "Memory Error during bundle adjustment"
-**Solution**: Reduce the number of images or 3D points:
-```python
-# In Wrapper.py
-MAX_POINTS = 5000  # Limit number of 3D points
-```
-
-#### Issue: "Poor reconstruction quality"
-**Possible causes**:
-- Insufficient image overlap
-- Poor feature matches
-- Incorrect camera calibration
-- Large baseline between views
-
-**Solutions**:
-- Use more images with gradual viewpoint changes
-- Adjust RANSAC threshold
-- Verify calibration parameters
-- Increase feature detection sensitivity
-
-#### Issue: "RANSAC fails to find inliers"
-**Solution**: Adjust RANSAC parameters:
-```python
-RANSAC_THRESHOLD = 0.1  # Increase threshold
-RANSAC_MAX_ITERATIONS = 2000  # More iterations
-```
+| Issue | Solution |
+|-------|----------|
+| "Data folder not found" | Run `Wrapper.py` from `Phase1` directory |
+| "ModuleNotFoundError" | Install missing package: `pip install <package>` |
+| Memory error | Reduce image count or limit 3D points |
+| Poor reconstruction | Check image overlap, feature matches, calibration |
+| RANSAC fails | Increase threshold: `RANSAC_THRESHOLD = 0.1` |
 
 ---
 
@@ -488,26 +354,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-This project was developed as part of computer vision coursework, implementing concepts from:
+This project implements concepts from foundational computer vision literature:
+- *Multiple View Geometry in Computer Vision* by Hartley & Zisserman
+- *Computer Vision: Algorithms and Applications* by Richard Szeliski
+- OpenCV documentation and research papers on Structure-from-Motion
 
-- **Multiple View Geometry in Computer Vision** by Hartley & Zisserman
-- **Computer Vision: Algorithms and Applications** by Richard Szeliski
-- OpenCV documentation and tutorials
-- Structure-from-Motion research papers and implementations
-
-### References
-
-1. Hartley, R., & Zisserman, A. (2004). *Multiple View Geometry in Computer Vision*
-2. Snavely, N., Seitz, S. M., & Szeliski, R. (2006). *Photo Tourism: Exploring Photo Collections in 3D*
-3. Triggs, B., et al. (1999). *Bundle Adjustment — A Modern Synthesis*
-4. Schönberger, J. L., & Frahm, J.-M. (2016). *Structure-from-Motion Revisited*
-
-### Tools & Libraries
-
-- [OpenCV](https://opencv.org/) - Computer vision library
-- [NumPy](https://numpy.org/) - Numerical computing
-- [SciPy](https://scipy.org/) - Scientific computing
-- [Matplotlib](https://matplotlib.org/) - Visualization
+Built with [OpenCV](https://opencv.org/), [NumPy](https://numpy.org/), [SciPy](https://scipy.org/), and [Matplotlib](https://matplotlib.org/).
 
 ---
 
