@@ -19,9 +19,8 @@
 
 ---
 
-## 👋 About This Project
-
-I'm **Harmeet Dhillon**, a robotics engineer specializing in computer vision and autonomous systems. This project represents my deep dive into 3D reconstruction techniques, implementing a complete Structure-from-Motion pipeline from scratch. Through this work, I'm exploring the mathematical foundations of multi-view geometry and building the core algorithms that enable robots to understand and navigate 3D environments. This implementation covers everything from feature matching and camera pose estimation to bundle adjustment and 3D point cloud generation—essential skills for my research in SLAM, autonomous navigation, and robotic perception.
+## About This Project
+This project represents my deep dive into 3D reconstruction techniques, implementing a complete Structure-from-Motion pipeline from scratch. Through this work, I'm exploring the mathematical foundations of multi-view geometry and building the core algorithms that enable robots to understand and navigate 3D environments. This implementation covers everything from feature matching and camera pose estimation to bundle adjustment and 3D point cloud generation—essential skills for my research in SLAM, autonomous navigation, and robotic perception.
 
 ---
 
@@ -59,7 +58,7 @@ I'm **Harmeet Dhillon**, a robotics engineer specializing in computer vision and
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### 1. Clone the Repository
 
@@ -106,7 +105,7 @@ python -c "import cv2, numpy, scipy; print('Installation successful!')"
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Structure-From-Motion/
@@ -312,7 +311,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
@@ -324,7 +323,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Here's how you can help:
 
@@ -352,7 +351,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 This project implements concepts from foundational computer vision literature:
 - *Multiple View Geometry in Computer Vision* by Hartley & Zisserman
@@ -363,7 +362,7 @@ Built with [OpenCV](https://opencv.org/), [NumPy](https://numpy.org/), [SciPy](h
 
 ---
 
-## 📧 Contact
+## Contact
 
 **Harmeet Dhillon**
 
