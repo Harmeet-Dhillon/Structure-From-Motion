@@ -136,7 +136,7 @@ Structure-From-Motion/
 
 ---
 
-## 🚀 Usage
+## Usage
 
 ### Basic Usage
 
@@ -198,7 +198,7 @@ IMAGE_INDICES = [1, 2, 3, 5, 7]  # Process only these images
 
 ---
 
-## 🔬 Pipeline Architecture
+## Pipeline Architecture
 
 ```
 Input Images
@@ -265,7 +265,7 @@ minimize Σ_i Σ_j ||x_ij - π(K_i[R_i|t_i]X_j)||^2
 
 ---
 
-## 📊 Results
+## Results
 
 ### Output Metrics
 - **Reprojection Error**: Mean pixel distance between observed and projected points
@@ -286,7 +286,7 @@ The pipeline generates 3D point cloud visualizations, camera trajectory plots, a
 
 ---
 
-## 📚 Dependencies
+## Dependencies
 
 | Package | Version | Purpose |
 |---------|---------|---------|
@@ -345,7 +345,7 @@ Contributions are welcome! Here's how you can help:
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
