@@ -38,15 +38,15 @@ This project represents my deep dive into 3D reconstruction techniques, implemen
 
 ---
 
-## ✨ Features
+## Features
 
-- 🎥 **Multi-View Reconstruction** - Build comprehensive 3D models from multiple images
-- 📐 **Epipolar Geometry** - Essential and Fundamental matrix estimation with RANSAC
-- 🎯 **Feature Matching** - Robust SIFT/SURF feature detection with outlier filtering
-- 🔺 **Triangulation** - Linear and non-linear 3D point reconstruction
-- 🔧 **Bundle Adjustment** - Global optimization using Levenberg-Marquardt
-- 📊 **3D Visualization** - Interactive point cloud and camera trajectory plots
-- ⚡ **Incremental Reconstruction** - PnP-based sequential camera registration
+- **Multi-View Reconstruction** - Build comprehensive 3D models from multiple images
+- **Epipolar Geometry** - Essential and Fundamental matrix estimation with RANSAC
+- **Feature Matching** - Robust SIFT/SURF feature detection with outlier filtering
+- **Triangulation** - Linear and non-linear 3D point reconstruction
+- **Bundle Adjustment** - Global optimization using Levenberg-Marquardt
+- **3D Visualization** - Interactive point cloud and camera trajectory plots
+- **Incremental Reconstruction** - PnP-based sequential camera registration
 
 ---
 
